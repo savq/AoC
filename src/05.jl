@@ -6,7 +6,7 @@ struct Line{N <: Integer}
 end
 
 function read_input(path)
-    # add one so I don't have to deal with 0-index problems
+    ## add one so I don't have to deal with 0-index problems
     [Line((parse.(Int, match(r"(\d+),(\d+) -> (\d+),(\d+)", i).captures) .+ 1)...) for i in eachline(path)]
 end
 
@@ -36,5 +36,11 @@ function solve1(lines)
     count(>=(2), M)
 end
 
-solve1(read_input("inputs/05-2"))
+function main()
+    path = abspath(joinpath(@__DIR__, "..", "data/", "05.in"))
+    solve1(read_input(path))
+end
 
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
+end

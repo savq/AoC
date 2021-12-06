@@ -29,9 +29,8 @@ function solve1(boards, nums)
         end
     end
 end
-# solve1(read_input("./inputs/04-2")...)
 
-## TODO
+## TODO:
 function solve2(boards, nums)
     likely_solve = 0
     for num in nums
@@ -58,5 +57,13 @@ function solve2(boards, nums)
     return likely_solve
 end
 
-# solve2(read_input("./inputs/04-2")...)
+function main()
+    path = abspath(joinpath(@__DIR__, "..", "data/", "04.in"))
+    board, nums = read_input(path)
+    solve1(board, nums) |> println
+    # solve2(board, nums) |> println
+end
 
+if abspath(PROGRAM_FILE) == @__FILE__
+    main()
+end
