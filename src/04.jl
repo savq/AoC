@@ -6,62 +6,46 @@ function read_input(path)
     input = readlines(path)
     nums = parse_nums(input[1])
     boards = [parse_board(input[i:(i+4)]) for i in 3:6:length(input)]
-    boards, nums
+    return boards, nums
 end
 
-function bingo(b)
-    count(==(-5), sum(b, dims=1)) >= 1 ||
-    count(==(-5), sum(b, dims=2)) >= 1
+play!(board, n) = map!(x -> if x == n; -1 else x end, board, board)
+
+function bingo(board)
+    count(==(-5), sum(board, dims=1)) >= 1 ||
+    count(==(-5), sum(board, dims=2)) >= 1
 end
 
 function solve1(boards, nums)
-    for num in nums
-        ## 1. play boards
-        for board in boards
-            map!(x -> if x == num; -1 else x end, board, board)
-        end
-        ## 2. check boards
-        for board in boards
-            if bingo(board)
-                ## 3. calculate score
-                return sum(filter(>(-1), board)) * num
-            end
+    for num in nums, board in boards
+        play!(board, num)
+        if bingo(board)
+            score = sum(filter(>(-1), board)) * num
+            return score
         end
     end
 end
 
-## TODO:
 function solve2(boards, nums)
-    likely_solve = 0
-    for num in nums
-        ## 1. play boards
-        for board in boards
-            map!(x -> if x == num; -1 else x end, board, board)
+    score = 0
+    solved = zeros(Bool, length(boards))
+    for num in nums, i in 1:length(boards)
+        play!(boards[i], num)
+        if !solved[i] && bingo(boards[i])
+            ## this board might be the last to win
+            score = sum(filter(>(-1), boards[i])) * num
+            ## mark board so it's not played anymore
+            solved[i] = true
         end
-        solved_boards = zeros(Bool, length(boards))
-        ## 2. check boards
-        @show length(boards)
-        for i in 1:length(boards)
-            if bingo(boards[i])
-                ## this might be the last board that wins
-                likely_solve = sum(filter(>(-1), boards[i])) * num
-                ## mark it so it's not played anymore
-                solved_boards[i] = true
-                @show num
-                @show i
-                @show likely_solve
-            end
-        end
-        deleteat!(boards, solved_boards)
     end
-    return likely_solve
+    return score
 end
 
 function main()
     path = abspath(joinpath(@__DIR__, "..", "data/", "04.in"))
     board, nums = read_input(path)
     solve1(board, nums) |> println
-    # solve2(board, nums) |> println
+    solve2(board, nums) |> println
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
