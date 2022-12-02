@@ -1,0 +1,4 @@
+name = "aoc2022"
+uuid = "9996587d-009c-4cb0-bef9-5de1bfcde57a"
+authors = ["Sergio Alejandro Vargas <savargasqu+git@unal.edu.co>"]
+version = "0.1.0"
