@@ -10,14 +10,17 @@ CrZsJsPPZsGzwwsLwLmpwMDw
 """
 
 function problem1(path)
-    common_items = flatten([(l=length(line); intersect(line[1:(l÷2)], line[(l÷2)+1:end])) for line in eachline(path)])
-    sum(Int, [islowercase(x) ? (x - 0x60) : (x - 0x26) for x in xs])
+    sum(eachline(path)) do line
+        half = length(line) ÷ 2
+        item = intersect(line[1:half], line[half+1:end])[1]
+        Int(item - (islowercase(item) ? 0x60 : 0x26))
+    end
 end
 
 function problem2(path)
     groups = reshape(readlines(path), 3, :)
-    common_items = flatten([intersect(xs[:, i]...) for i in 1:size(xs, 2)])
-    sum(Int, [islowercase(x) ? (x - 0x60) : (x - 0x26) for x in xs])
+    common_items = flatten([intersect(groups[:, i]...) for i in 1:size(groups, 2)])
+    sum(Int, [item - (islowercase(item) ? 0x60 : 0x26) for item in common_items])
 end
 
 quote
