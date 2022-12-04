@@ -19,7 +19,7 @@ end
 
 function problem2(path)
     groups = reshape(readlines(path), 3, :)
-    common_items = flatten([intersect(groups[:, i]...) for i in 1:size(groups, 2)])
+    common_items = flatten([intersect(col...) for col in eachcol(groups)])
     sum(Int, [item - (islowercase(item) ? 0x60 : 0x26) for item in common_items])
 end
 
