@@ -8,27 +8,27 @@ const test = """
 """
 
 function problem1(path)
-    sum(eachline(path)) do line
-        sections = parse.(Int, split(line, r"[,-]"))
-        r1 = range(sections[1:2]...)
-        r2 = range(sections[3:4]...)
+    count(eachline(path)) do line
+        a, b, c, d = parse.(Int, split(line, r"[,-]"))
+        r1 = a:b
+        r2 = c:d
         (r1 ⊆ r2) || (r1 ⊇ r2)
     end
 end
 
 function problem2(path)
-    sum(eachline(path)) do line
-        sections = parse.(Int, split(line, r"[,-]"))
-        r1 = range(sections[1:2]...)
-        r2 = range(sections[3:4]...)
-        !isempty(r1 ∩ r2)
+    count(eachline(path)) do line
+        a, b, c, d = parse.(Int, split(line, r"[,-]"))
+        r1 = a:b
+        r2 = c:d
+        !isdisjoint(r1, r2)
     end
 end
 
 quote
     using Revise
     day = "day4"
-    path = joinpath(@__DIR__, "data/$day.in")
+    path = joinpath(@__DIR__, "data", day)
     includet("src/$day.jl")
 
     # problem1(IOBuffer(test))
